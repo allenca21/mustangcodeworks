@@ -1,9 +1,12 @@
-Drop these files here (see the project README for exact sizes):
-  logo-horizontal.svg
-  favicon.svg
-  favicon-32.png
-  apple-touch-icon.png
-  og-image.png
+Filenames must match EXACTLY. Anything else here is ignored by the build.
+
+  logo-horizontal.svg   header lockup, wide (~5:1), transparent background
+  logo-horizontal.png   same, if you only have a raster version
+  logo-mark.svg         small square mark, pairs with the text wordmark
+  favicon.svg           browser tab icon
+  favicon-32.png        32x32 fallback
+  apple-touch-icon.png  180x180
+  og-image.png          1200x630 link preview
   icon-whats-the-call-baseball.png
   icon-whats-the-call-softball.png
   icon-whats-the-call-fast-pitch.png

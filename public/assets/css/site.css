@@ -82,13 +82,15 @@ a:hover { color: var(--cyber); }
 }
 .site-head .wrap {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 24px; min-height: 68px;
+  gap: 24px; min-height: 80px; padding-top: 10px; padding-bottom: 10px;
 }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
-.brand img { height: 34px; width: auto; display: block; }
+.brand img { max-height: 44px; max-width: 250px; width: auto; height: auto; display: block; }
+.brand img.brand-mark { height: 26px; width: 26px; max-height: none; }
 .brand-fallback {
   font-family: var(--f-display);
-  font-weight: 700; font-size: 17px; letter-spacing: .06em; text-transform: uppercase;
+  font-weight: 700; font-size: 17px; letter-spacing: .07em; text-transform: uppercase;
+  white-space: nowrap;
 }
 .brand-fallback span { color: var(--accent); }
 .nav { display: flex; gap: 26px; align-items: center; flex-wrap: wrap; }

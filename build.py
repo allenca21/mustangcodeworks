@@ -296,13 +296,15 @@ a:hover { color: var(--cyber); }
 }
 .site-head .wrap {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 24px; min-height: 68px;
+  gap: 24px; min-height: 80px; padding-top: 10px; padding-bottom: 10px;
 }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
-.brand img { height: 34px; width: auto; display: block; }
+.brand img { max-height: 44px; max-width: 250px; width: auto; height: auto; display: block; }
+.brand img.brand-mark { height: 26px; width: 26px; max-height: none; }
 .brand-fallback {
   font-family: var(--f-display);
-  font-weight: 700; font-size: 17px; letter-spacing: .06em; text-transform: uppercase;
+  font-weight: 700; font-size: 17px; letter-spacing: .07em; text-transform: uppercase;
+  white-space: nowrap;
 }
 .brand-fallback span { color: var(--accent); }
 .nav { display: flex; gap: 26px; align-items: center; flex-wrap: wrap; }
@@ -491,12 +493,8 @@ HEAD = """<!DOCTYPE html>
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{url}">
 <meta property="og:type" content="website">
-<meta property="og:image" content="{site_url}/assets/img/og-image.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#0A0C0E">
-<link rel="icon" href="{root}assets/img/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="{root}assets/img/favicon-32.png" sizes="32x32">
-<link rel="apple-touch-icon" href="{root}assets/img/apple-touch-icon.png">
+{og_image}<meta name="theme-color" content="#0A0C0E">
+{icons}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -506,11 +504,7 @@ HEAD = """<!DOCTYPE html>
 
 <header class="site-head">
   <div class="wrap">
-    <a class="brand" href="{root}index.html">
-      <img src="{root}assets/img/logo-horizontal.svg" alt="{company}"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-      <span class="brand-fallback" style="display:none;">Mustang <span>Codeworks</span></span>
-    </a>
+    <a class="brand" href="{root}index.html">{brandmark}</a>
     <nav class="nav">
       <a href="{root}apps/index.html"{nav_apps}>Apps</a>
       <a href="{root}consulting/index.html"{nav_consulting}>Consulting</a>
@@ -568,9 +562,39 @@ def page(path_depth, title, desc, url, body, nav=None):
             r=root, s=a["slug"], n=a["name"])
         for a in APPS
     )
+    # Prefer a true horizontal lockup. Failing that, pair the small mark with a
+    # live-text wordmark, which stays crisp at any size. Failing that, text alone.
+    wordmark = '<span class="brand-fallback">Mustang <span>Codeworks</span></span>'
+    lockup = next((f for f in ("logo-horizontal.svg", "logo-horizontal.png")
+                   if f in AVAILABLE_IMAGES), None)
+    if lockup:
+        brandmark = ('<img src="{r}assets/img/{f}" alt="{c}">'
+                     .format(r=root, f=lockup, c=SITE["company"]))
+    elif "logo-mark.svg" in AVAILABLE_IMAGES:
+        brandmark = ('<img class="brand-mark" src="{r}assets/img/logo-mark.svg" alt="">{w}'
+                     .format(r=root, w=wordmark))
+    else:
+        brandmark = wordmark
+
+    og_image = ""
+    if "og-image.png" in AVAILABLE_IMAGES:
+        og_image = ('<meta property="og:image" content="{u}/assets/img/og-image.png">\n'
+                    '<meta name="twitter:card" content="summary_large_image">\n'
+                    .format(u=SITE["url"]))
+
+    icon_tags = []
+    if "favicon.svg" in AVAILABLE_IMAGES:
+        icon_tags.append('<link rel="icon" href="{r}assets/img/favicon.svg" type="image/svg+xml">'.format(r=root))
+    if "favicon-32.png" in AVAILABLE_IMAGES:
+        icon_tags.append('<link rel="icon" href="{r}assets/img/favicon-32.png" sizes="32x32">'.format(r=root))
+    if "apple-touch-icon.png" in AVAILABLE_IMAGES:
+        icon_tags.append('<link rel="apple-touch-icon" href="{r}assets/img/apple-touch-icon.png">'.format(r=root))
+    icons = "\n".join(icon_tags)
+
     head = HEAD.format(
+        og_image=og_image, icons=icons,
         title=title, desc=desc, url=url, site_url=SITE["url"], root=root,
-        company=SITE["company"],
+        company=SITE["company"], brandmark=brandmark,
         nav_apps=navmap["apps"], nav_consulting=navmap["consulting"],
         nav_support=navmap["support"], nav_privacy=navmap["privacy"],
     )
@@ -596,11 +620,15 @@ def store_buttons(app):
 
 
 def app_card(app, root):
+    icon = ""
+    if "icon-{}.png".format(app["slug"]) in AVAILABLE_IMAGES:
+        icon = ('<img class="card-icon" src="{root}assets/img/icon-{slug}.png" alt="">'
+                .format(root=root, slug=app["slug"]))
+
     return """
     <article class="card" id="{slug}">
       <div class="card-top">
-        <img class="card-icon" src="{root}assets/img/icon-{slug}.png" alt=""
-             onerror="this.style.visibility='hidden';">
+        {icon}
         <div>
           {kicker}
           <h3>{name}</h3>
@@ -615,7 +643,7 @@ def app_card(app, root):
       <div class="status">{status}</div>
     </article>""".format(
         slug=app["slug"], name=app["name"], blurb=app["blurb"],
-        status=app["status"], stores=store_buttons(app), root=root,
+        status=app["status"], stores=store_buttons(app), root=root, icon=icon,
         kicker='<div class="kicker">{}</div>'.format(app["family"]) if app["family"] else "",
     )
 
@@ -963,6 +991,10 @@ def write(path, content):
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "public")
 
+# Filenames present in public/assets/img/ at build time. Pages only emit an
+# <img> when the file actually exists, so the browser never requests a 404.
+AVAILABLE_IMAGES = set()
+
 def main():
     # public/ is generated, but assets/img/ holds files you added by hand
     # (logo, favicon, app icons). Preserve them across rebuilds.
@@ -974,6 +1006,8 @@ def main():
             if os.path.isfile(path) and name != "README.txt":
                 with open(path, "rb") as f:
                     keep[name] = f.read()
+
+    AVAILABLE_IMAGES.update(keep.keys())
 
     if os.path.isdir(OUT):
         shutil.rmtree(OUT)
@@ -1028,9 +1062,14 @@ def main():
     # placeholder so the assets/img folder survives in git
     os.makedirs(os.path.join(OUT, "assets", "img"), exist_ok=True)
     write(os.path.join(OUT, "assets", "img", "README.txt"),
-          "Drop these files here (see the project README for exact sizes):\n"
-          "  logo-horizontal.svg\n  favicon.svg\n  favicon-32.png\n"
-          "  apple-touch-icon.png\n  og-image.png\n"
+          "Filenames must match EXACTLY. Anything else here is ignored by the build.\n\n"
+          "  logo-horizontal.svg   header lockup, wide (~5:1), transparent background\n"
+          "  logo-horizontal.png   same, if you only have a raster version\n"
+          "  logo-mark.svg         small square mark, pairs with the text wordmark\n"
+          "  favicon.svg           browser tab icon\n"
+          "  favicon-32.png        32x32 fallback\n"
+          "  apple-touch-icon.png  180x180\n"
+          "  og-image.png          1200x630 link preview\n"
           + "".join("  icon-{}.png\n".format(a["slug"]) for a in APPS))
 
     for name, blob in keep.items():
