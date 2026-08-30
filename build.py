@@ -23,6 +23,12 @@ from datetime import date
 # CONFIG - edit these
 # --------------------------------------------------------------------------
 
+# Flip to True on launch day. While False, the site asks search engines not to
+# index it (robots.txt Disallow + a noindex meta tag on every page). This does
+# NOT make the site private - it only keeps it out of search results. For real
+# access control, put Cloudflare Access in front of it.
+PUBLISHED = True
+
 SITE = {
     "company":   "Mustang Codeworks LLC",
     "short":     "Mustang Codeworks",
@@ -55,7 +61,7 @@ APPS = [
                  "Live Call for in-game situations.",
         "ios_url": "",
         "play_url": "",
-        "status": "Live on iOS &middot; Android in progress",
+        "status": "Live on iOS and Google Play",
         "collects": ["purchase", "diagnostics"],
         "faq": [
             ("I paid for Pro but it isn't unlocking.",
@@ -70,25 +76,6 @@ APPS = [
         ],
     },
     {
-        "slug": "whats-the-call-softball",
-        "name": "What's the Call? Softball",
-        "family": "What's the Call?",
-        "tagline": "Softball rules, drilled until they're instinct.",
-        "blurb": "The softball edition of the What's the Call? rules trainer, with "
-                 "its own scenario library and rule interpretation chapters.",
-        "ios_url": "",
-        "play_url": "",
-        "status": "Live on iOS &middot; Android in progress",
-        "collects": ["purchase", "diagnostics"],
-        "faq": [
-            ("I paid for Pro but it isn't unlocking.",
-             "Open Settings and tap Restore Purchases, signed in with the store "
-             "account that made the original purchase."),
-            ("Can I use it without a connection?",
-             "Yes. Quizzes and rule content work fully offline once downloaded."),
-        ],
-    },
-    {
         "slug": "whats-the-call-fast-pitch",
         "name": "What's the Call? Fast Pitch",
         "family": "What's the Call?",
@@ -97,7 +84,7 @@ APPS = [
                  "tuned to the situations that actually come up on the field.",
         "ios_url": "",
         "play_url": "",
-        "status": "Live on iOS &middot; Android in progress",
+        "status": "Live on iOS and Google Play",
         "collects": ["purchase", "diagnostics"],
         "faq": [
             ("I paid for Pro but it isn't unlocking.",
@@ -193,6 +180,15 @@ APPS = [
 ]
 
 # Data categories used in the privacy policies.
+# Spelled-out app count, so no page can ever disagree with APPS.
+_NUM = {1: "One", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six",
+        7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten"}
+
+def count_word(cap=True):
+    w = _NUM.get(len(APPS), str(len(APPS)))
+    return w if cap else w.lower()
+
+
 COLLECT_LABELS = {
     "purchase":    ("Purchase and subscription status",
                     "Whether you hold an active subscription or purchase, so the "
@@ -205,6 +201,19 @@ COLLECT_LABELS = {
     "email":       ("Email address",
                     "Only if you write to us for support. Used to answer you, and "
                     "kept no longer than needed to resolve your question."),
+}
+
+# --------------------------------------------------------------------------
+# RETIRED - apps no longer on the site. Their old support and privacy URLs
+# redirect to the replacement so anyone holding an old link still lands
+# somewhere useful instead of a 404.
+#   "old-slug": "replacement-slug"
+# --------------------------------------------------------------------------
+
+RETIRED = {
+    # Nothing retired yet. Softball was sunset before launch, so no old links
+    # exist to rescue. Add entries here only for apps removed AFTER the site
+    # went live and had real URLs in the wild.
 }
 
 # --------------------------------------------------------------------------
@@ -429,7 +438,7 @@ p { max-width: var(--measure); }
 .prose li { margin-bottom: 9px; }
 .prose h2 { font-size: 23px; margin-top: 44px; }
 .prose h3 { font-size: 17.5px; }
-.dl { margin: 0; }
+.dl { margin: 0 0 46px; }
 .dl dt {
   font-family: var(--f-display); font-weight: 600; font-size: 16.5px;
   margin-top: 24px; margin-bottom: 5px;
@@ -487,7 +496,7 @@ HEAD = """<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
-<meta name="description" content="{desc}">
+<meta name="description" content="{desc}">{noindex}
 <link rel="canonical" href="{url}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
@@ -591,8 +600,10 @@ def page(path_depth, title, desc, url, body, nav=None):
         icon_tags.append('<link rel="apple-touch-icon" href="{r}assets/img/apple-touch-icon.png">'.format(r=root))
     icons = "\n".join(icon_tags)
 
+    noindex = "" if PUBLISHED else '\n<meta name="robots" content="noindex, nofollow">'
+
     head = HEAD.format(
-        og_image=og_image, icons=icons,
+        og_image=og_image, icons=icons, noindex=noindex,
         title=title, desc=desc, url=url, site_url=SITE["url"], root=root,
         company=SITE["company"], brandmark=brandmark,
         nav_apps=navmap["apps"], nav_consulting=navmap["consulting"],
@@ -660,8 +671,9 @@ def build_home():
     <p class="eyebrow">{tagline}</p>
     <h1>Software built by someone who had to use it first.</h1>
     <p class="lede">Mustang Codeworks builds mobile applications and provides
-    cybersecurity and software consulting. Six apps shipped across iOS and Android,
-    and twenty-six years of Navy C4I and defensive cyber operations behind them.</p>
+    cybersecurity and software consulting. {count} apps shipped across iOS and
+    Android, and twenty-six years of Navy computer, communications, and defensive
+    cyber operations behind them.</p>
   </div>
 </section>
 
@@ -680,10 +692,10 @@ def build_home():
   </div>
   <div class="track">
     <h2>Consulting</h2>
-    <p>Cyber operations planning, application security, and full-lifecycle mobile
-    development for teams that need a builder, not a briefing.</p>
+    <p>Application security and full-lifecycle mobile development for teams that
+    need a builder, not a briefing.</p>
     <ul>
-      <li>Cyber operations planning &amp; DCO</li>
+      <li>Cybersecurity planning</li>
       <li>Application and mobile security review</li>
       <li>End-to-end mobile delivery, design through store release</li>
     </ul>
@@ -700,14 +712,16 @@ def build_home():
     supported by the person who wrote it.</p>
     <div class="apps">{cards}</div>
     <div class="btn-row" style="margin-top:28px;">
-      <a class="btn" href="apps/index.html">All six apps</a>
+      <a class="btn" href="apps/index.html">All {countlower} apps</a>
     </div>
   </div>
 </section>
-""".format(tagline=SITE["tagline"], cards=cards)
+""".format(tagline=SITE["tagline"], cards=cards,
+           count=count_word(), countlower=count_word(cap=False))
     return page(0, "{} — {}".format(SITE["short"], SITE["tagline"]),
-                "Mobile applications and cybersecurity consulting. Six apps live on "
-                "iOS and Android, backed by 26 years of Navy C4I and cyber operations.",
+                "Mobile applications and cybersecurity consulting. {} apps live on "
+                "iOS and Android, backed by 26 years of Navy computer, "
+                "communications and cyber operations.".format(count_word()),
                 SITE["url"] + "/", body)
 
 
@@ -718,8 +732,8 @@ def build_apps():
   <div class="wrap">
     <p class="eyebrow">Products</p>
     <h1>Apps</h1>
-    <p class="lede">Six applications across iOS and Android. Each one has a support
-    page and its own privacy policy, linked from its card.</p>
+    <p class="lede">{count} applications across iOS and Android. Each one has a
+    support page and its own privacy policy, linked from its card.</p>
   </div>
 </section>
 
@@ -728,7 +742,7 @@ def build_apps():
     <div class="apps">{cards}</div>
   </div>
 </section>
-""".format(cards=cards)
+""".format(cards=cards, count=count_word())
     return page(1, "Apps — " + SITE["short"],
                 "All apps from Mustang Codeworks: What's the Call?, VoltForge, and Trace.",
                 SITE["url"] + "/apps/", body, nav="apps")
@@ -739,10 +753,10 @@ def build_consulting():
 <section class="hero">
   <div class="wrap">
     <p class="eyebrow">Consulting</p>
-    <h1>Twenty-six years of operations, then six apps in six months.</h1>
+    <h1>Twenty-six years of operations, then {countlower} apps in six months.</h1>
     <p class="lede">I spent fourteen years enlisted before commissioning, retired as
-    a Lieutenant Commander, and built C4I and defensive cyber capability for the
-    fleet. Now I build software. Both halves inform the work.</p>
+    a Lieutenant Commander, and built computer, communications, and defensive
+    cybersecurity capabilities. Now I build software. Both halves inform the work.</p>
   </div>
 </section>
 
@@ -750,9 +764,9 @@ def build_consulting():
   <div class="wrap narrow">
     <h2>What I do</h2>
     <dl class="dl">
-      <dt>Cyber operations planning</dt>
-      <dd>Defensive cyber operations, CPT support, and the planning work that turns
-      an intent into an executable operation. Active TS clearance.</dd>
+      <dt>Cybersecurity Development</dt>
+      <dd>Defensive cyber operations, and the planning work that turns an intent
+      into an executable operation.</dd>
 
       <dt>Application &amp; mobile security</dt>
       <dd>Security review of mobile applications and their backends, from someone
@@ -760,7 +774,7 @@ def build_consulting():
 
       <dt>Full-lifecycle mobile delivery</dt>
       <dd>Design, build, subscription integration, store submission, and the
-      post-launch maintenance nobody warns you about. Six apps, two platforms.</dd>
+      post-launch maintenance nobody warns you about. {count} apps, two platforms.</dd>
 
       <dt>Process and reporting tooling</dt>
       <dd>Internal tools that remove repetitive work &mdash; SharePoint and Power BI
@@ -770,7 +784,7 @@ def build_consulting():
     <h2>Background</h2>
     <p>Master&rsquo;s in Cybersecurity. Career Navy: fourteen years enlisted, then
     commissioned, retiring as a LCDR with a background in C4I leadership and
-    defensive cyber operations. Active Top Secret clearance.</p>
+    defensive cyber operations.</p>
 
     <h2>Get in touch</h2>
     <p>Availability, rates, and scope are all conversations. The fastest way to
@@ -780,10 +794,11 @@ def build_consulting():
     </div>
   </div>
 </section>
-""".format(email=SITE["email_hello"])
+""".format(email=SITE["email_hello"],
+           count=count_word(), countlower=count_word(cap=False))
     return page(1, "Consulting — " + SITE["short"],
                 "Cyber operations planning, application security, and full-lifecycle "
-                "mobile development. Active TS clearance.",
+                "mobile development for teams that need a builder.",
                 SITE["url"] + "/consulting/", body, nav="consulting")
 
 
@@ -1038,14 +1053,28 @@ def main():
 """)
 
     # Cloudflare Pages: tidy URLs and legacy paths
-    write(os.path.join(OUT, "_redirects"), """# Short links you can print or hand out
-/support/*   /support/:splat.html   200
-/privacy/*   /privacy/:splat.html   200
-/apps        /apps/index.html       301
-""")
+    redirects = []
+    if RETIRED:
+        redirects.append("# Retired apps -> their replacement")
+    for old, new in sorted(RETIRED.items()):
+        for area in ("support", "privacy"):
+            redirects.append("/{a}/{o}.html   /{a}/{n}.html   301".format(a=area, o=old, n=new))
+            redirects.append("/{a}/{o}        /{a}/{n}.html   301".format(a=area, o=old, n=new))
+    if RETIRED:
+        redirects.append("")
+    redirects.append("# Short links you can print or hand out")
+    redirects.append("/support/*   /support/:splat.html   200")
+    redirects.append("/privacy/*   /privacy/:splat.html   200")
+    redirects.append("/apps        /apps/index.html       301")
+    write(os.path.join(OUT, "_redirects"), "\n".join(redirects) + "\n")
 
-    write(os.path.join(OUT, "robots.txt"),
-          "User-agent: *\nAllow: /\n\nSitemap: {}/sitemap.xml\n".format(SITE["url"]))
+    if PUBLISHED:
+        write(os.path.join(OUT, "robots.txt"),
+              "User-agent: *\nAllow: /\n\nSitemap: {}/sitemap.xml\n".format(SITE["url"]))
+    else:
+        write(os.path.join(OUT, "robots.txt"),
+              "# Not launched yet - see PUBLISHED in build.py\n"
+              "User-agent: *\nDisallow: /\n")
 
     urls = ["/", "/apps/", "/consulting/", "/support/", "/privacy/"]
     urls += ["/support/{}.html".format(a["slug"]) for a in APPS]

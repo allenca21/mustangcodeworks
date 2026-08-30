@@ -8,7 +8,6 @@ Filenames must match EXACTLY. Anything else here is ignored by the build.
   apple-touch-icon.png  180x180
   og-image.png          1200x630 link preview
   icon-whats-the-call-baseball.png
-  icon-whats-the-call-softball.png
   icon-whats-the-call-fast-pitch.png
   icon-whats-the-call-flag-football.png
   icon-voltforge.png

@@ -215,7 +215,7 @@ p { max-width: var(--measure); }
 .prose li { margin-bottom: 9px; }
 .prose h2 { font-size: 23px; margin-top: 44px; }
 .prose h3 { font-size: 17.5px; }
-.dl { margin: 0; }
+.dl { margin: 0 0 46px; }
 .dl dt {
   font-family: var(--f-display); font-weight: 600; font-size: 16.5px;
   margin-top: 24px; margin-bottom: 5px;
