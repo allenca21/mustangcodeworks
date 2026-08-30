@@ -52,6 +52,69 @@ SITE = {
 
 APPS = [
     {
+        "slug": "trace",
+        "name": "Trace",
+        "family": None,
+        "tagline": "See what's tracking you.",
+        "blurb": "A privacy tool for everyday people. Background Bluetooth tracker "
+                 "detection, a direction finder for locating a tracker near you, "
+                 "network exposure checks, and a built-in speed test.",
+        "ios_url": "https://apps.apple.com/us/app/trace-privacy/id6762682869",
+        "play_url": "https://play.google.com/store/apps/details?id=com.allenca21.poseidonsgate",
+        "status": "Live on iOS and Google Play &middot; v1.1.0",
+        "collects": ["purchase", "diagnostics"],
+        "permissions": [
+            ("Bluetooth", "Required to scan for nearby trackers. Scan results are "
+                          "processed on your device and are not transmitted to us."),
+            ("Location", "iOS and Android both require location permission for any "
+                         "app that scans for Bluetooth devices. Trace uses it only "
+                         "to enable scanning. Your location is not collected, "
+                         "stored, or transmitted."),
+            ("Local network", "Used by the network exposure check and speed test to "
+                              "read the properties of the Wi-Fi network you're on."),
+        ],
+        "faq": [
+            ("Does Trace send my scan results anywhere?",
+             "No. Bluetooth scanning and analysis happen entirely on your device. "
+             "Tracker detections are not uploaded."),
+            ("Why does Trace need location permission?",
+             "Both iOS and Android require location permission for any app that "
+             "scans for Bluetooth devices - it's a platform rule, not a Trace "
+             "requirement. Trace does not collect or transmit your location."),
+            ("The direction finder isn't pointing anywhere.",
+             "Signal strength direction finding needs you to move. Walk slowly in "
+             "one direction for several seconds and watch whether the signal "
+             "strengthens or weakens. Concrete, metal and water all distort it."),
+            ("I found a tracker. What should I do?",
+             "If you believe you are being followed, contact local law enforcement. "
+             "Trace can tell you a device is present; it cannot tell you who owns it."),
+        ],
+    },
+    {
+        "slug": "voltforge",
+        "name": "VoltForge",
+        "family": None,
+        "tagline": "Field calculations for working electricians.",
+        "blurb": "A jobsite reference and calculator built for electricians. "
+                 "Transformer sizing with wiring diagrams, load calculations, "
+                 "and a launchpad that gets you to the number fast.",
+        "ios_url": "https://apps.apple.com/us/app/voltforge/id6762475628",
+        "play_url": "https://play.google.com/store/apps/details?id=com.allenca21.voltforge",
+        "status": "Live on iOS and Google Play",
+        "collects": ["purchase", "diagnostics"],
+        "faq": [
+            ("Are the calculations code-compliant?",
+             "VoltForge is a reference tool, not a substitute for the current NEC "
+             "or your local amendments. Always verify against the code edition "
+             "your jurisdiction has adopted."),
+            ("Does it work offline?",
+             "Yes. Every calculator runs on-device with no connection required."),
+            ("Can I use it in dark conditions?",
+             "Yes. Settings has a light and dark theme; dark is easier in a panel "
+             "room or after sunset."),
+        ],
+    },
+    {
         "slug": "whats-the-call-baseball",
         "name": "What's the Call? Baseball",
         "family": "What's the Call?",
@@ -112,69 +175,6 @@ APPS = [
              "to unlock, email support and include your receipt."),
             ("Can I use it without a connection?",
              "Yes. Quizzes and rule content work fully offline once downloaded."),
-        ],
-    },
-    {
-        "slug": "voltforge",
-        "name": "VoltForge",
-        "family": None,
-        "tagline": "Field calculations for working electricians.",
-        "blurb": "A jobsite reference and calculator built for electricians. "
-                 "Transformer sizing with wiring diagrams, load calculations, "
-                 "and a launchpad that gets you to the number fast.",
-        "ios_url": "https://apps.apple.com/us/app/voltforge/id6762475628",
-        "play_url": "https://play.google.com/store/apps/details?id=com.allenca21.voltforge",
-        "status": "Live on iOS and Google Play",
-        "collects": ["purchase", "diagnostics"],
-        "faq": [
-            ("Are the calculations code-compliant?",
-             "VoltForge is a reference tool, not a substitute for the current NEC "
-             "or your local amendments. Always verify against the code edition "
-             "your jurisdiction has adopted."),
-            ("Does it work offline?",
-             "Yes. Every calculator runs on-device with no connection required."),
-            ("Can I use it in dark conditions?",
-             "Yes. Settings has a light and dark theme; dark is easier in a panel "
-             "room or after sunset."),
-        ],
-    },
-    {
-        "slug": "trace",
-        "name": "Trace",
-        "family": None,
-        "tagline": "See what's tracking you.",
-        "blurb": "A privacy tool for everyday people. Background Bluetooth tracker "
-                 "detection, a direction finder for locating a tracker near you, "
-                 "network exposure checks, and a built-in speed test.",
-        "ios_url": "https://apps.apple.com/us/app/trace-privacy/id6762682869",
-        "play_url": "https://play.google.com/store/apps/details?id=com.allenca21.poseidonsgate",
-        "status": "Live on iOS and Google Play &middot; v1.1.0",
-        "collects": ["purchase", "diagnostics"],
-        "permissions": [
-            ("Bluetooth", "Required to scan for nearby trackers. Scan results are "
-                          "processed on your device and are not transmitted to us."),
-            ("Location", "iOS and Android both require location permission for any "
-                         "app that scans for Bluetooth devices. Trace uses it only "
-                         "to enable scanning. Your location is not collected, "
-                         "stored, or transmitted."),
-            ("Local network", "Used by the network exposure check and speed test to "
-                              "read the properties of the Wi-Fi network you're on."),
-        ],
-        "faq": [
-            ("Does Trace send my scan results anywhere?",
-             "No. Bluetooth scanning and analysis happen entirely on your device. "
-             "Tracker detections are not uploaded."),
-            ("Why does Trace need location permission?",
-             "Both iOS and Android require location permission for any app that "
-             "scans for Bluetooth devices - it's a platform rule, not a Trace "
-             "requirement. Trace does not collect or transmit your location."),
-            ("The direction finder isn't pointing anywhere.",
-             "Signal strength direction finding needs you to move. Walk slowly in "
-             "one direction for several seconds and watch whether the signal "
-             "strengthens or weakens. Concrete, metal and water all distort it."),
-            ("I found a tracker. What should I do?",
-             "If you believe you are being followed, contact local law enforcement. "
-             "Trace can tell you a device is present; it cannot tell you who owns it."),
         ],
     },
 ]

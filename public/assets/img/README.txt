@@ -7,8 +7,8 @@ Filenames must match EXACTLY. Anything else here is ignored by the build.
   favicon-32.png        32x32 fallback
   apple-touch-icon.png  180x180
   og-image.png          1200x630 link preview
+  icon-trace.png
+  icon-voltforge.png
   icon-whats-the-call-baseball.png
   icon-whats-the-call-fast-pitch.png
   icon-whats-the-call-flag-football.png
-  icon-voltforge.png
-  icon-trace.png
