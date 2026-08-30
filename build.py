@@ -148,7 +148,7 @@ APPS = [
                  "network exposure checks, and a built-in speed test.",
         "ios_url": "https://apps.apple.com/us/app/trace-privacy/id6762682869",
         "play_url": "https://play.google.com/store/apps/details?id=com.allenca21.poseidonsgate",
-        "status": "Live on iOS and Google Play &middot; v1.1.0",
+        "status": "Live on iOS and Google Play",
         "collects": ["purchase", "diagnostics"],
         "permissions": [
             ("Bluetooth", "Required to scan for nearby trackers. Scan results are "
@@ -783,7 +783,7 @@ def build_consulting():
 
     <h2>Background</h2>
     <p>Master&rsquo;s in Cybersecurity. Career Navy: fourteen years enlisted, then
-    commissioned, retiring as a LCDR with a background in C4I leadership and
+    commissioned, retiring as a LCDR with a background in Computers and communications leadership and
     defensive cyber operations.</p>
 
     <h2>Get in touch</h2>
