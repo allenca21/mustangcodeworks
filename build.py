@@ -59,8 +59,8 @@ APPS = [
         "blurb": "Scenario-based rules training for baseball umpires, coaches, "
                  "players and parents. Quizzes, rule interpretation chapters, and "
                  "Live Call for in-game situations.",
-        "ios_url": "",
-        "play_url": "",
+        "ios_url": "https://apps.apple.com/us/app/whats-the-call/id6761323772",
+        "play_url": "https://play.google.com/store/apps/details?id=com.allenca21.whatsthecall",
         "status": "Live on iOS and Google Play",
         "collects": ["purchase", "diagnostics"],
         "faq": [
@@ -82,8 +82,8 @@ APPS = [
         "tagline": "Fast pitch situations, called correctly.",
         "blurb": "Fast pitch rules training built on the same scenario engine, "
                  "tuned to the situations that actually come up on the field.",
-        "ios_url": "",
-        "play_url": "",
+        "ios_url": "https://apps.apple.com/us/app/whats-the-call-fast-pitch/id6762152590",
+        "play_url": "https://play.google.com/store/apps/details?id=com.allenca21.whatsthecallfastpitch",
         "status": "Live on iOS and Google Play",
         "collects": ["purchase", "diagnostics"],
         "faq": [
@@ -101,7 +101,7 @@ APPS = [
         "tagline": "Flag football rules without the arguments.",
         "blurb": "Rules training for flag football officials, coaches and parents, "
                  "covering the calls that decide games.",
-        "ios_url": "",
+        "ios_url": "https://apps.apple.com/us/app/whats-the-call-flag-football/id6761696510",
         "play_url": "",
         "status": "Live on iOS &middot; Android in progress",
         "collects": ["purchase", "diagnostics"],
@@ -122,8 +122,8 @@ APPS = [
         "blurb": "A jobsite reference and calculator built for electricians. "
                  "Transformer sizing with wiring diagrams, load calculations, "
                  "and a launchpad that gets you to the number fast.",
-        "ios_url": "",
-        "play_url": "",
+        "ios_url": "https://apps.apple.com/us/app/voltforge/id6762475628",
+        "play_url": "https://play.google.com/store/apps/details?id=com.allenca21.voltforge",
         "status": "Live on iOS and Google Play",
         "collects": ["purchase", "diagnostics"],
         "faq": [
@@ -146,8 +146,8 @@ APPS = [
         "blurb": "A privacy tool for everyday people. Background Bluetooth tracker "
                  "detection, a direction finder for locating a tracker near you, "
                  "network exposure checks, and a built-in speed test.",
-        "ios_url": "",
-        "play_url": "",
+        "ios_url": "https://apps.apple.com/us/app/trace-privacy/id6762682869",
+        "play_url": "https://play.google.com/store/apps/details?id=com.allenca21.poseidonsgate",
         "status": "Live on iOS and Google Play &middot; v1.1.0",
         "collects": ["purchase", "diagnostics"],
         "permissions": [
