@@ -27,7 +27,7 @@ from datetime import date
 # index it (robots.txt Disallow + a noindex meta tag on every page). This does
 # NOT make the site private - it only keeps it out of search results. For real
 # access control, put Cloudflare Access in front of it.
-PUBLISHED = True
+PUBLISHED = False
 
 SITE = {
     "company":   "Mustang Codeworks LLC",
@@ -1060,12 +1060,15 @@ def main():
         for area in ("support", "privacy"):
             redirects.append("/{a}/{o}.html   /{a}/{n}.html   301".format(a=area, o=old, n=new))
             redirects.append("/{a}/{o}        /{a}/{n}.html   301".format(a=area, o=old, n=new))
-    if RETIRED:
+    # NOTE: no /support/* or /privacy/* wildcards here. Cloudflare Pages already
+    # resolves /support/trace to /support/trace.html on its own, and a wildcard
+    # rewrite also swallows /support/index.html -> /support/index.html.html,
+    # which falls back to serving the site root at a subdirectory URL and breaks
+    # every relative asset path on the page.
+    if redirects:
         redirects.append("")
-    redirects.append("# Short links you can print or hand out")
-    redirects.append("/support/*   /support/:splat.html   200")
-    redirects.append("/privacy/*   /privacy/:splat.html   200")
-    redirects.append("/apps        /apps/index.html       301")
+    redirects.append("# Tidy alias")
+    redirects.append("/apps   /apps/index.html   301")
     write(os.path.join(OUT, "_redirects"), "\n".join(redirects) + "\n")
 
     if PUBLISHED:

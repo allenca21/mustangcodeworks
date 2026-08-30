@@ -1,4 +1,2 @@
-# Short links you can print or hand out
-/support/*   /support/:splat.html   200
-/privacy/*   /privacy/:splat.html   200
-/apps        /apps/index.html       301
+# Tidy alias
+/apps   /apps/index.html   301
