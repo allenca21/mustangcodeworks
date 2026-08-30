@@ -23,7 +23,7 @@ from datetime import date
 # CONFIG - edit these
 # --------------------------------------------------------------------------
 
-# Flip to True on launch day. While False, the site asks search engines not to
+# Launched. Set to False only to pull the site out of search results again —
 # index it (robots.txt Disallow + a noindex meta tag on every page). This does
 # NOT make the site private - it only keeps it out of search results. For real
 # access control, put Cloudflare Access in front of it.
@@ -148,7 +148,7 @@ APPS = [
                  "network exposure checks, and a built-in speed test.",
         "ios_url": "https://apps.apple.com/us/app/trace-privacy/id6762682869",
         "play_url": "https://play.google.com/store/apps/details?id=com.allenca21.poseidonsgate",
-        "status": "Live on iOS and Google Play",
+        "status": "Live on iOS and Google Play &middot; v1.1.0",
         "collects": ["purchase", "diagnostics"],
         "permissions": [
             ("Bluetooth", "Required to scan for nearby trackers. Scan results are "
@@ -783,7 +783,7 @@ def build_consulting():
 
     <h2>Background</h2>
     <p>Master&rsquo;s in Cybersecurity. Career Navy: fourteen years enlisted, then
-    commissioned, retiring as a LCDR with a background in Computers and communications leadership and
+    commissioned, retiring as a LCDR with a background in C4I leadership and
     defensive cyber operations.</p>
 
     <h2>Get in touch</h2>
@@ -1040,7 +1040,15 @@ def main():
 
     write(os.path.join(OUT, "assets", "css", "site.css"), CSS.strip() + "\n")
 
-    # Cloudflare Pages: security headers
+    # Cloudflare Pages: security headers.
+    #
+    # Assets get a one-hour cache, not the usual year. A year with "immutable"
+    # is correct only when filenames contain a content hash (site.a3f9c2.css),
+    # so a change produces a new URL. These filenames are stable, so an
+    # aggressive cache would strand visitors on an old logo or stylesheet with
+    # no way to push a fix. stale-while-revalidate keeps it fast anyway:
+    # the browser serves the cached copy instantly and refreshes in the
+    # background.
     write(os.path.join(OUT, "_headers"), """/*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
@@ -1049,7 +1057,7 @@ def main():
   Strict-Transport-Security: max-age=31536000; includeSubDomains
 
 /assets/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 """)
 
     # Cloudflare Pages: tidy URLs and legacy paths
