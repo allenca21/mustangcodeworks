@@ -27,7 +27,7 @@ from datetime import date
 # index it (robots.txt Disallow + a noindex meta tag on every page). This does
 # NOT make the site private - it only keeps it out of search results. For real
 # access control, put Cloudflare Access in front of it.
-PUBLISHED = False
+PUBLISHED = True
 
 SITE = {
     "company":   "Mustang Codeworks LLC",

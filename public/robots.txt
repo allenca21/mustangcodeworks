@@ -1,3 +1,4 @@
-# Not launched yet - see PUBLISHED in build.py
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://mustangcodeworks.com/sitemap.xml
