@@ -1,6 +1,6 @@
 # mustangcodeworks.com
 
-Static site for Mustang Codeworks LLC. Company pages, an app directory with store
+Static site for Mustang Codeworks. Company pages, an app directory with store
 links, and the per-app **support** and **privacy** pages that Apple and Google
 require for every listing.
 
